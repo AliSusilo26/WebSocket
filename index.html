@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Test</title>
+</head>
+<body>
+    <h1>WebSocket Test</h1>
+    <button id="connectBtn">Connect</button>
+    <button id="disconnectBtn">Disconnect</button>
+    <p>Status: <span id="status">Disconnected</span></p>
+    <p>Received: <span id="messages"></span></p>
+
+    <script>
+        let socket;
+
+        document.getElementById('connectBtn').addEventListener('click', function() {
+            socket = new WebSocket('ws://localhost:8080/ws');
+
+            socket.onopen = function(e) {
+                document.getElementById('status').textContent = 'Connected';
+            };
+
+            socket.onmessage = function(event) {
+                let messages = document.getElementById('messages');
+                messages.textContent = messages.textContent + '\\n' + event.data;
+            };
+
+            socket.onclose = function(event) {
+                if (event.wasClean) {
+                    document.getElementById('status').textContent = 'Disconnected';
+                } else {
+                    document.getElementById('status').textContent = 'Disconnected unexpectedly';
+                }
+            };
+
+            socket.onerror = function(error) {
+                console.error('WebSocket Error: ', error);
+            };
+        });
+
+        document.getElementById('disconnectBtn').addEventListener('click', function() {
+            if(socket) {
+                socket.close();
+                document.getElementById('status').textContent = 'Disconnected';
+            }
+        });
+    </script>
+</body>
+</html>
