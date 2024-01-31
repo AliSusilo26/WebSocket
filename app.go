@@ -19,7 +19,7 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Println("Upgrade error:", err)
+		log.Println("Upgrade errors:", err)
 		return
 	}
 	log.Println("WebSocket connection established")
